@@ -3,7 +3,7 @@ const gpio = @import("gpio.zig");
 
 pub fn main() void {
     uart.init(115200);
-    uart.write("hello!\r\n");
+    uart.write("All your codebase are belong to us!\r\n");
 
     gpio.init(5, .out);
 
