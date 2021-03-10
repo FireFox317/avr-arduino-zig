@@ -11,13 +11,12 @@ SECTIONS
         KEEP(*(.vectors))
 
         *(.text*)
-
-        *(.rodata*)
     } > flash
 
     .data :
     {
         __data_start = .;
+        *(.rodata*)
         *(.data*)
         __data_end = .;
     } > ram AT> flash
@@ -29,5 +28,5 @@ SECTIONS
         __bss_end = .;
     } > ram
 
-    __data_load_begin = LOADADDR(.data);
+    __data_load_start = LOADADDR(.data);
 }
