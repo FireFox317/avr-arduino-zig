@@ -73,7 +73,7 @@ pub fn write(data: []const u8) void {
     while (UCSR0A.read().TXC0 != 1) {}
 }
 
-fn write_ch(ch: u8) void {
+pub fn write_ch(ch: u8) void {
     // Wait till the transmit buffer is empty
     while (UCSR0A.read().UDRE0 != 1) {}
 
