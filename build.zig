@@ -43,7 +43,7 @@ pub fn build(b: *Builder) !void {
         flash_command,
     });
     upload.dependOn(&avrdude.step);
-    avrdude.step.dependOn(&exe.step);
+    avrdude.step.dependOn(&exe.install_step.?.step);
 
     const objdump = b.step("objdump", "Show dissassembly of the code using avr-objdump");
     const avr_objdump = b.addSystemCommand(&.{
@@ -52,7 +52,7 @@ pub fn build(b: *Builder) !void {
         bin_path,
     });
     objdump.dependOn(&avr_objdump.step);
-    avr_objdump.step.dependOn(&exe.step);
+    avrdude.step.dependOn(&exe.install_step.?.step);
 
     const monitor = b.step("monitor", "Opens a monitor to the serial output");
     const screen = b.addSystemCommand(&.{
