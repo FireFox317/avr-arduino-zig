@@ -17,6 +17,11 @@ pub fn main() void {
     bss_stuff = "\r\nhello\r\n".*;
     uart.write(&bss_stuff);
 
+    // This will actually call our panic handler in start.zig when
+    // uncommented.
+    // var x: u8 = 255;
+    // x += 1;
+
     gpio.init(5, .out);
 
     while (true) {

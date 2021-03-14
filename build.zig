@@ -11,7 +11,7 @@ pub fn build(b: *Builder) !void {
 
     const exe = b.addExecutable("avr-arduino-zig", "src/start.zig");
     exe.setTarget(uno);
-    exe.setBuildMode(.ReleaseSmall);
+    exe.setBuildMode(.ReleaseSafe);
     exe.bundle_compiler_rt = false;
     exe.setLinkerScriptPath("src/linker.ld");
     exe.install();
