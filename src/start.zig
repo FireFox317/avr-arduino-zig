@@ -1,6 +1,7 @@
 const main = @import("main.zig");
 const vectors = @import("vectors.zig");
 const uart = @import("uart.zig");
+const StackTrace = @import("std").builtin.StackTrace;
 
 pub export fn _start() callconv(.Naked) noreturn {
     // At startup the stack pointer is at the end of RAM
@@ -64,10 +65,11 @@ fn clear_bss() void {
     // Probably a good idea to add clobbers here, but compiler doesn't seem to care
 }
 
-pub fn panic(msg: []const u8, error_return_trace: ?*@import("builtin").StackTrace) noreturn {
+pub fn panic(msg: []const u8, error_return_trace: ?*StackTrace) noreturn {
     // Currently assumes that the uart is initialized in main().
     uart.write("PANIC: ");
     uart.write(msg);
+    uart.write("\r\n");
 
     // TODO: print stack trace (addresses), which can than be turned into actual source line
     //       numbers on the connected machine.
