@@ -1,1 +1,1 @@
-pub const CPU_FREQ = 16000000;
+pub const CPU_FREQ = 16_000_000;
