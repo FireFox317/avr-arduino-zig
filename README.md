@@ -10,3 +10,8 @@ Currently only `avrdude` is an external dependency that is needed to program the
 * `zig build upload -Dtty=/dev/ttyACM0` uploads the code to an Arduino connected to `/dev/ttyACM0`.
 * `zig build monitor -Dtty=/dev/ttyACM0` shows the serial monitor using `screen`.  
 * `zig build objdump` shows the disassembly (`avr-objdump` has to be installed).
+
+
+## Debug and development
+
+* `avr-nm --size-sort --reverse-sort -td zig-out/bin/avr-arduino-zig` shows sorted symbol sizes

@@ -22,7 +22,7 @@ pub fn main() void {
     // var x: u8 = 255;
     // x += 1;
 
-    gpio.init(5, .out);
+    gpio.init(5, .output);
 
     while (true) {
         uart.write_ch(ch);
