@@ -16,11 +16,11 @@ pub fn MMIO(comptime addr: usize, comptime IntT: type, comptime PackedT: type) t
             ptr().* = intVal;
         }
 
-        pub fn read_int() IntT {
+        pub fn readInt() IntT {
             return ptr().*;
         }
 
-        pub fn write_int(val: IntT) void {
+        pub fn writeInt(val: IntT) void {
             ptr().* = val;
         }
     };

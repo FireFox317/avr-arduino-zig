@@ -34,11 +34,11 @@ pub fn main() void {
         }
 
         gpio.toggle(5);
-        delay_cycles(50000);
+        delayCycles(50000);
     }
 }
 
-fn delay_cycles(cycles: u32) void {
+fn delayCycles(cycles: u32) void {
     var count: u32 = 0;
     while (count < cycles) : (count += 1) {
         asm volatile ("nop");
