@@ -13,10 +13,10 @@ pub fn main() void {
     while(true) {
         gpio.write(LED, .high);
         
-        arduino.delayMilliseconds(500);
+        arduino.cpu.delayMilliseconds(500);
 
         gpio.write(LED, .low);
         
-        arduino.delayMilliseconds(500);
+        arduino.cpu.delayMilliseconds(500);
     }
 }

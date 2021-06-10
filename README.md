@@ -1,3 +1,7 @@
+This fork contains my tests and examples for some arduino programs in zig, based on the the 
+upstream https://github.com/FireFox317/avr-arduino-zig
+and some extensions from https://github.com/Guigui220D/avr-arduino-zig
+
 # AVR Arduino Zig
 
 This project can build code that can be run on an Arduino Uno, using only Zig as its **only** dependency. 
@@ -6,8 +10,8 @@ Currently only `avrdude` is an external dependency that is needed to program the
 
 ## Build instructions
 
-* `zig build` creates the executable.
-* `zig build upload -Dtty=/dev/ttyACM0` uploads the code to an Arduino connected to `/dev/ttyACM0`.
+* `zig build -Dname=examples/lcd.zig` creates the executable.
+* `zig build upload -Dtty=/dev/ttyACM0 -Dname=examples/lcd.zig` uploads the code to an Arduino connected to `/dev/ttyACM0`.
 * `zig build monitor -Dtty=/dev/ttyACM0` shows the serial monitor using `screen`.  
 * `zig build objdump` shows the disassembly (`avr-objdump` has to be installed).
 
