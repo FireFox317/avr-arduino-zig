@@ -1,5 +1,14 @@
+// uart.init(115200);
+// uart.write("All your codebase are belong to us!\r\n\r\n");
+
+// if (bss_stuff[0] == 0)
+//     uart.write("Ahh its actually zero!\r\n");
+
+// bss_stuff = "\r\nhello\r\n".*;
+// uart.write(&bss_stuff);
+
+
 const MMIO = @import("mmio.zig").MMIO;
-const uno = @import("uno.zig");
 
 const UDR0 = MMIO(0xc6, u8, packed union {
     RXB: u8,
@@ -48,9 +57,9 @@ const UBRR0H = MMIO(0xc5, u8, packed struct {
     reserved: u4 = 0,
 });
 
-pub fn init(comptime baud: comptime_int) void {
+pub fn init(comptime cpu_freq: comptime_int, comptime baud: comptime_int) void {
     const UBRRn: u12 = comptime blk: {
-        break :blk (uno.CPU_FREQ / (8 * baud)) - 1;
+        break :blk (cpu_freq / (8 * baud)) - 1;
     };
 
     // Set baudrate

@@ -1,7 +1,7 @@
-const main = @import("main.zig");
 const vectors = @import("vectors.zig");
 const uart = @import("uart.zig");
-const StackTrace = @import("std").builtin.StackTrace;
+const std = @import("std");
+
 
 pub export fn _start() callconv(.Naked) noreturn {
     // At startup the stack pointer is at the end of RAM
@@ -14,7 +14,8 @@ pub export fn _start() callconv(.Naked) noreturn {
     copy_data_to_ram();
     clear_bss();
 
-    main.main();
+    @import("root").main();
+    
     while (true) {}
 }
 
@@ -65,13 +66,16 @@ fn clear_bss() void {
     // Probably a good idea to add clobbers here, but compiler doesn't seem to care
 }
 
-pub fn panic(msg: []const u8, error_return_trace: ?*StackTrace) noreturn {
-    // Currently assumes that the uart is initialized in main().
+pub fn panicHang(msg: []const u8, maybe_stack_trace: ?*std.builtin.StackTrace) noreturn {
+    while (true) {}
+}
+
+
+// !! uart has to be initialized for this to work
+pub fn panicLogUart(msg: []const u8, maybe_stack_trace: ?*std.builtin.StackTrace) noreturn {
     uart.write("PANIC: ");
     uart.write(msg);
     uart.write("\r\n");
 
-    // TODO: print stack trace (addresses), which can than be turned into actual source line
-    //       numbers on the connected machine.
     while (true) {}
 }

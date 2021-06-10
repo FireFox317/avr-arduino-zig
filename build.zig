@@ -1,7 +1,6 @@
 const std = @import("std");
-const Builder = std.build.Builder;
 
-pub fn build(b: *Builder) !void {
+pub fn build(b: *std.build.Builder) !void {
     const uno = std.zig.CrossTarget{
         .cpu_arch = .avr,
         .cpu_model = .{ .explicit = &std.Target.avr.cpu.atmega328p },
@@ -9,7 +8,20 @@ pub fn build(b: *Builder) !void {
         .abi = .none,
     };
 
-    const exe = b.addExecutable("avr-arduino-zig", "src/start.zig");
+    const lib = std.build.Pkg {
+        .name = "arduino",
+        .path = "src/arduino.zig",
+    };
+
+    const exe_name = b.option(
+        []const u8,
+        "name",
+        "Specify the example to build. Defaults to examples/blink.zig",
+    ) orelse "examples/blink.zig";
+
+
+    const exe = b.addExecutable(std.mem.trimRight(u8, std.fs.path.basename(exe_name), ".zig"), exe_name);
+    exe.addPackage(lib);
     exe.setTarget(uno);
     exe.setBuildMode(.ReleaseSafe);
     exe.bundle_compiler_rt = false;
