@@ -23,7 +23,7 @@ const PORTB = MMIO(0x25, u8, packed struct {
 });
 
 /// For now only supports PORTB
-pub fn init(comptime pin: u8, comptime dir: enum { in = 0, out }) void {
+pub fn init(comptime pin: u8, comptime dir: enum { in, out }) void {
     DDRB.write_int(@as(u8, @enumToInt(dir)) << pin);
 }
 
