@@ -13,7 +13,7 @@ pub fn build(b: *Builder) !void {
     exe.setTarget(uno);
     exe.setBuildMode(.ReleaseSafe);
     exe.bundle_compiler_rt = false;
-    exe.setLinkerScriptPath("src/linker.ld");
+    exe.setLinkerScriptPath(std.build.FileSource{ .path = "src/linker.ld" });
     exe.install();
 
     const tty = b.option(
