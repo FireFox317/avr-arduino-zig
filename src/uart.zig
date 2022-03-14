@@ -1,4 +1,3 @@
-const MMIO = @import("mmio.zig").MMIO;
 const uno = @import("uno.zig");
 
 const UDR0 = MMIO(0xc6, u8, packed union {
