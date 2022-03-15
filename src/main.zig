@@ -7,6 +7,14 @@ var ch: u8 = '!';
 // This ends up in the bss section
 var bss_stuff: [9]u8 = .{ 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+// put public functions here named after interrupts to instantiate them as
+// interrupt handlers. If you name one incorrectly you'll get a compiler error
+// with the full list of options
+pub const interrupts = struct {
+    // Example:
+    //pub fn PCINT0() void {}
+};
+
 pub fn main() void {
     uart.init(115200);
     uart.write("All your codebase are belong to us!\r\n\r\n");
