@@ -4,9 +4,9 @@ const uart = @import("uart.zig");
 const std = @import("std");
 const builtin = std.builtin;
 
-export const vector_table linksection(".vectors") = blk: {
+comptime {
     std.debug.assert(std.mem.eql(u8, "RESET", std.meta.fields(atmega328p.VectorTable)[0].name));
-    var asm_str: []const u8 = "jmp _start\n";
+    var asm_str: []const u8 = ".section .vectors\njmp _start\n";
 
     const has_interrupts = @hasDecl(main, "interrupts");
     if (has_interrupts) {
@@ -56,9 +56,8 @@ export const vector_table linksection(".vectors") = blk: {
 
         asm_str = asm_str ++ new_insn ++ "\n";
     }
-
-    break :blk asm (asm_str);
-};
+    asm (asm_str);
+}
 
 export fn _unhandled_vector() void {
     while (true) {}
@@ -122,7 +121,7 @@ fn clear_bss() void {
     // Probably a good idea to add clobbers here, but compiler doesn't seem to care
 }
 
-pub fn panic(msg: []const u8, error_return_trace: ?*builtin.StackTrace) noreturn {
+pub fn panic(msg: []const u8, error_return_trace: ?*builtin.StackTrace, _: ?usize) noreturn {
     // Currently assumes that the uart is initialized in main().
     uart.write("PANIC: ");
     uart.write(msg);

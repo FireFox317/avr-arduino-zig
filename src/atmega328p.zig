@@ -1313,15 +1313,15 @@ pub fn mmioInt(addr: usize, comptime size: usize, comptime T: type) *volatile Mm
 }
 
 const InterruptVector = extern union {
-    C: fn () callconv(.C) void,
-    Naked: fn () callconv(.Naked) void,
+    C: *const fn () callconv(.C) void,
+    Naked: *const fn () callconv(.Naked) void,
     // Interrupt is not supported on arm
 };
 
 const unhandled = InterruptVector{
-    .C = struct {
+    .C = &(struct {
         fn tmp() callconv(.C) noreturn {
             @panic("unhandled interrupt");
         }
-    }.tmp,
+    }.tmp),
 };
