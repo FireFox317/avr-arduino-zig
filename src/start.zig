@@ -13,10 +13,10 @@ comptime {
         if (@hasDecl(main.interrupts, "RESET"))
             @compileError("Not allowed to overload the reset vector");
 
-        inline for (std.meta.declarations(main.interrupts)) |decl| {
+        for (std.meta.declarations(main.interrupts)) |decl| {
             if (!@hasField(atmega328p.VectorTable, decl.name)) {
                 var msg: []const u8 = "There is no such interrupt as '" ++ decl.name ++ "'. ISRs the 'interrupts' namespace must be one of:\n";
-                inline for (std.meta.fields(atmega328p.VectorTable)) |field| {
+                for (std.meta.fields(atmega328p.VectorTable)) |field| {
                     if (!std.mem.eql(u8, "RESET", field.name)) {
                         msg = msg ++ "    " ++ field.name ++ "\n";
                     }
@@ -27,7 +27,7 @@ comptime {
         }
     }
 
-    inline for (std.meta.fields(atmega328p.VectorTable)[1..]) |field| {
+    for (std.meta.fields(atmega328p.VectorTable)[1..]) |field| {
         const new_insn = if (has_interrupts) overload: {
             if (@hasDecl(main.interrupts, field.name)) {
                 const handler = @field(main.interrupts, field.name);
@@ -63,7 +63,7 @@ export fn _unhandled_vector() void {
     while (true) {}
 }
 
-pub export fn _start() callconv(.Naked) noreturn {
+pub export fn _start() noreturn {
     // At startup the stack pointer is at the end of RAM
     // so, no need to set it manually!
 

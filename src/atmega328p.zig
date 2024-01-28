@@ -61,12 +61,10 @@ pub const VectorTable = extern struct {
 };
 
 pub const registers = struct {
-
     /// Fuses
     pub const FUSE = struct {
-
         /// address: 0x2
-        pub const EXTENDED = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const EXTENDED = @as(*volatile Mmio(8, packed struct {
             /// Brown-out Detector trigger level
             ///
             /// 0x4: Brown-out detection at VCC=4.3 V
@@ -79,10 +77,10 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x2);
+        }), @ptrFromInt(0x2));
 
         /// address: 0x1
-        pub const HIGH = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const HIGH = @as(*volatile Mmio(8, packed struct {
             /// Boot Reset vector Enabled
             BOOTRST: u1,
             /// Select boot size
@@ -102,10 +100,10 @@ pub const registers = struct {
             DWEN: u1,
             /// Reset Disabled (Enable PC6 as i/o pin)
             RSTDISBL: u1,
-        }), 0x1);
+        }), @ptrFromInt(0x1));
 
         /// address: 0x0
-        pub const LOW = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const LOW = @as(*volatile Mmio(8, packed struct {
             /// Select Clock Source
             ///
             /// 0x0: Ext. Clock; Start-up time PWRDWN/RESET: 6 CK/14 CK + 0 ms
@@ -168,14 +166,13 @@ pub const registers = struct {
             CKOUT: u1,
             /// Divide clock by 8 internally
             CKDIV8: u1,
-        }), 0x0);
+        }), @ptrFromInt(0x0));
     };
 
     /// Lockbits
     pub const LOCKBIT = struct {
-
         /// address: 0x0
-        pub const LOCKBIT = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const LOCKBIT = @as(*volatile Mmio(8, packed struct {
             /// Memory Lock
             ///
             /// 0x0: Further programming and verification disabled
@@ -198,19 +195,18 @@ pub const registers = struct {
             BLB1: u2,
             padding0: u1,
             padding1: u1,
-        }), 0x0);
+        }), @ptrFromInt(0x0));
     };
 
     /// USART
     pub const USART0 = struct {
-
         /// address: 0xc6
         /// USART I/O Data Register
-        pub const UDR0 = @intToPtr(*volatile u8, 0xc6);
+        pub const UDR0 = @as(*volatile u8, @ptrFromInt(0xc6));
 
         /// address: 0xc0
         /// USART Control and Status Register A
-        pub const UCSR0A = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const UCSR0A = @as(*volatile Mmio(8, packed struct {
             /// Multi-processor Communication Mode
             MPCM0: u1,
             /// Double the USART transmission speed
@@ -227,11 +223,11 @@ pub const registers = struct {
             TXC0: u1,
             /// USART Receive Complete
             RXC0: u1,
-        }), 0xc0);
+        }), @ptrFromInt(0xc0));
 
         /// address: 0xc1
         /// USART Control and Status Register B
-        pub const UCSR0B = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const UCSR0B = @as(*volatile Mmio(8, packed struct {
             /// Transmit Data Bit 8
             TXB80: u1,
             /// Receive Data Bit 8
@@ -248,11 +244,11 @@ pub const registers = struct {
             TXCIE0: u1,
             /// RX Complete Interrupt Enable
             RXCIE0: u1,
-        }), 0xc1);
+        }), @ptrFromInt(0xc1));
 
         /// address: 0xc2
         /// USART Control and Status Register C
-        pub const UCSR0C = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const UCSR0C = @as(*volatile Mmio(8, packed struct {
             /// Clock Polarity
             UCPOL0: u1,
             /// Character Size - together with UCSZ2 in UCSR0B
@@ -275,30 +271,29 @@ pub const registers = struct {
             /// 0x1: Synchronous USART
             /// 0x3: Master SPI
             UMSEL0: u2,
-        }), 0xc2);
+        }), @ptrFromInt(0xc2));
 
         /// address: 0xc4
         /// USART Baud Rate Register Bytes
-        pub const UBRR0 = @intToPtr(*volatile u12, 0xc4);
+        pub const UBRR0 = @as(*volatile u12, @ptrFromInt(0xc4));
     };
 
     /// Two Wire Serial Interface
     pub const TWI = struct {
-
         /// address: 0xbd
         /// TWI (Slave) Address Mask Register
-        pub const TWAMR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TWAMR = @as(*volatile Mmio(8, packed struct {
             reserved0: u1,
             TWAM: u7,
-        }), 0xbd);
+        }), @ptrFromInt(0xbd));
 
         /// address: 0xb8
         /// TWI Bit Rate register
-        pub const TWBR = @intToPtr(*volatile u8, 0xb8);
+        pub const TWBR = @as(*volatile u8, @ptrFromInt(0xb8));
 
         /// address: 0xbc
         /// TWI Control Register
-        pub const TWCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TWCR = @as(*volatile Mmio(8, packed struct {
             /// TWI Interrupt Enable
             TWIE: u1,
             reserved0: u1,
@@ -314,11 +309,11 @@ pub const registers = struct {
             TWEA: u1,
             /// TWI Interrupt Flag
             TWINT: u1,
-        }), 0xbc);
+        }), @ptrFromInt(0xbc));
 
         /// address: 0xb9
         /// TWI Status Register
-        pub const TWSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TWSR = @as(*volatile Mmio(8, packed struct {
             /// TWI Prescaler
             ///
             /// 0x0: 1
@@ -329,28 +324,27 @@ pub const registers = struct {
             reserved0: u1,
             /// TWI Status
             TWS: u5,
-        }), 0xb9);
+        }), @ptrFromInt(0xb9));
 
         /// address: 0xbb
         /// TWI Data register
-        pub const TWDR = @intToPtr(*volatile u8, 0xbb);
+        pub const TWDR = @as(*volatile u8, @ptrFromInt(0xbb));
 
         /// address: 0xba
         /// TWI (Slave) Address register
-        pub const TWAR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TWAR = @as(*volatile Mmio(8, packed struct {
             /// TWI General Call Recognition Enable Bit
             TWGCE: u1,
             /// TWI (Slave) Address register Bits
             TWA: u7,
-        }), 0xba);
+        }), @ptrFromInt(0xba));
     };
 
     /// Timer/Counter, 16-bit
     pub const TC1 = struct {
-
         /// address: 0x6f
         /// Timer/Counter Interrupt Mask Register
-        pub const TIMSK1 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TIMSK1 = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter1 Overflow Interrupt Enable
             TOIE1: u1,
             /// Timer/Counter1 Output CompareA Match Interrupt Enable
@@ -363,11 +357,11 @@ pub const registers = struct {
             ICIE1: u1,
             padding0: u1,
             padding1: u1,
-        }), 0x6f);
+        }), @ptrFromInt(0x6f));
 
         /// address: 0x36
         /// Timer/Counter Interrupt Flag register
-        pub const TIFR1 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TIFR1 = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter1 Overflow Flag
             TOV1: u1,
             /// Output Compare Flag 1A
@@ -380,11 +374,11 @@ pub const registers = struct {
             ICF1: u1,
             padding0: u1,
             padding1: u1,
-        }), 0x36);
+        }), @ptrFromInt(0x36));
 
         /// address: 0x80
         /// Timer/Counter1 Control Register A
-        pub const TCCR1A = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR1A = @as(*volatile Mmio(8, packed struct {
             /// Waveform Generation Mode
             WGM1: u2,
             reserved0: u1,
@@ -393,11 +387,11 @@ pub const registers = struct {
             COM1B: u2,
             /// Compare Output Mode 1A, bits
             COM1A: u2,
-        }), 0x80);
+        }), @ptrFromInt(0x80));
 
         /// address: 0x81
         /// Timer/Counter1 Control Register B
-        pub const TCCR1B = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR1B = @as(*volatile Mmio(8, packed struct {
             /// Prescaler source of Timer/Counter 1
             ///
             /// 0x0: No Clock Source (Stopped)
@@ -416,11 +410,11 @@ pub const registers = struct {
             ICES1: u1,
             /// Input Capture 1 Noise Canceler
             ICNC1: u1,
-        }), 0x81);
+        }), @ptrFromInt(0x81));
 
         /// address: 0x82
         /// Timer/Counter1 Control Register C
-        pub const TCCR1C = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR1C = @as(*volatile Mmio(8, packed struct {
             reserved0: u1,
             reserved1: u1,
             reserved2: u1,
@@ -429,27 +423,27 @@ pub const registers = struct {
             reserved5: u1,
             FOC1B: u1,
             FOC1A: u1,
-        }), 0x82);
+        }), @ptrFromInt(0x82));
 
         /// address: 0x84
         /// Timer/Counter1 Bytes
-        pub const TCNT1 = @intToPtr(*volatile u16, 0x84);
+        pub const TCNT1 = @as(*volatile u16, @ptrFromInt(0x84));
 
         /// address: 0x88
         /// Timer/Counter1 Output Compare Register Bytes
-        pub const OCR1A = @intToPtr(*volatile u16, 0x88);
+        pub const OCR1A = @as(*volatile u16, @ptrFromInt(0x88));
 
         /// address: 0x8a
         /// Timer/Counter1 Output Compare Register Bytes
-        pub const OCR1B = @intToPtr(*volatile u16, 0x8a);
+        pub const OCR1B = @as(*volatile u16, @ptrFromInt(0x8a));
 
         /// address: 0x86
         /// Timer/Counter1 Input Capture Register Bytes
-        pub const ICR1 = @intToPtr(*volatile u16, 0x86);
+        pub const ICR1 = @as(*volatile u16, @ptrFromInt(0x86));
 
         /// address: 0x43
         /// General Timer/Counter Control Register
-        pub const GTCCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const GTCCR = @as(*volatile Mmio(8, packed struct {
             /// Prescaler Reset Timer/Counter1 and Timer/Counter0
             PSRSYNC: u1,
             reserved0: u1,
@@ -460,15 +454,14 @@ pub const registers = struct {
             reserved5: u1,
             /// Timer/Counter Synchronization Mode
             TSM: u1,
-        }), 0x43);
+        }), @ptrFromInt(0x43));
     };
 
     /// Timer/Counter, 8-bit Async
     pub const TC2 = struct {
-
         /// address: 0x70
         /// Timer/Counter Interrupt Mask register
-        pub const TIMSK2 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TIMSK2 = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter2 Overflow Interrupt Enable
             TOIE2: u1,
             /// Timer/Counter2 Output Compare Match A Interrupt Enable
@@ -480,11 +473,11 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x70);
+        }), @ptrFromInt(0x70));
 
         /// address: 0x37
         /// Timer/Counter Interrupt Flag Register
-        pub const TIFR2 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TIFR2 = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter2 Overflow Flag
             TOV2: u1,
             /// Output Compare Flag 2A
@@ -496,11 +489,11 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x37);
+        }), @ptrFromInt(0x37));
 
         /// address: 0xb0
         /// Timer/Counter2 Control Register A
-        pub const TCCR2A = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR2A = @as(*volatile Mmio(8, packed struct {
             /// Waveform Genration Mode
             WGM2: u2,
             reserved0: u1,
@@ -509,11 +502,11 @@ pub const registers = struct {
             COM2B: u2,
             /// Compare Output Mode bits
             COM2A: u2,
-        }), 0xb0);
+        }), @ptrFromInt(0xb0));
 
         /// address: 0xb1
         /// Timer/Counter2 Control Register B
-        pub const TCCR2B = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR2B = @as(*volatile Mmio(8, packed struct {
             /// Clock Select bits
             ///
             /// 0x0: No Clock Source (Stopped)
@@ -533,23 +526,23 @@ pub const registers = struct {
             FOC2B: u1,
             /// Force Output Compare A
             FOC2A: u1,
-        }), 0xb1);
+        }), @ptrFromInt(0xb1));
 
         /// address: 0xb2
         /// Timer/Counter2
-        pub const TCNT2 = @intToPtr(*volatile u8, 0xb2);
+        pub const TCNT2 = @as(*volatile u8, @ptrFromInt(0xb2));
 
         /// address: 0xb4
         /// Timer/Counter2 Output Compare Register B
-        pub const OCR2B = @intToPtr(*volatile u8, 0xb4);
+        pub const OCR2B = @as(*volatile u8, @ptrFromInt(0xb4));
 
         /// address: 0xb3
         /// Timer/Counter2 Output Compare Register A
-        pub const OCR2A = @intToPtr(*volatile u8, 0xb3);
+        pub const OCR2A = @as(*volatile u8, @ptrFromInt(0xb3));
 
         /// address: 0xb6
         /// Asynchronous Status Register
-        pub const ASSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const ASSR = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter Control Register2 Update Busy
             TCR2BUB: u1,
             /// Timer/Counter Control Register2 Update Busy
@@ -565,11 +558,11 @@ pub const registers = struct {
             /// Enable External Clock Input
             EXCLK: u1,
             padding0: u1,
-        }), 0xb6);
+        }), @ptrFromInt(0xb6));
 
         /// address: 0x43
         /// General Timer Counter Control register
-        pub const GTCCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const GTCCR = @as(*volatile Mmio(8, packed struct {
             reserved0: u1,
             /// Prescaler Reset Timer/Counter2
             PSRASY: u1,
@@ -580,15 +573,14 @@ pub const registers = struct {
             reserved5: u1,
             /// Timer/Counter Synchronization Mode
             TSM: u1,
-        }), 0x43);
+        }), @ptrFromInt(0x43));
     };
 
     /// Analog-to-Digital Converter
     pub const ADC = struct {
-
         /// address: 0x7c
         /// The ADC multiplexer Selection Register
-        pub const ADMUX = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const ADMUX = @as(*volatile Mmio(8, packed struct {
             /// Analog Channel Selection Bits
             ///
             /// 0x0: ADC Single Ended Input pin 0
@@ -613,15 +605,15 @@ pub const registers = struct {
             /// 0x2: Reserved
             /// 0x3: Internal 1.1V Voltage Reference with external capacitor at AREF pin
             REFS: u2,
-        }), 0x7c);
+        }), @ptrFromInt(0x7c));
 
         /// address: 0x78
         /// ADC Data Register Bytes
-        pub const ADC = @intToPtr(*volatile u16, 0x78);
+        pub const ADC = @as(*volatile u16, @ptrFromInt(0x78));
 
         /// address: 0x7a
         /// The ADC Control and Status register A
-        pub const ADCSRA = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const ADCSRA = @as(*volatile Mmio(8, packed struct {
             /// ADC Prescaler Select Bits
             ///
             /// 0x0: 2
@@ -643,11 +635,11 @@ pub const registers = struct {
             ADSC: u1,
             /// ADC Enable
             ADEN: u1,
-        }), 0x7a);
+        }), @ptrFromInt(0x7a));
 
         /// address: 0x7b
         /// The ADC Control and Status register B
-        pub const ADCSRB = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const ADCSRB = @as(*volatile Mmio(8, packed struct {
             /// ADC Auto Trigger Source bits
             ///
             /// 0x0: Free Running mode
@@ -664,11 +656,11 @@ pub const registers = struct {
             reserved2: u1,
             ACME: u1,
             padding0: u1,
-        }), 0x7b);
+        }), @ptrFromInt(0x7b));
 
         /// address: 0x7e
         /// Digital Input Disable Register
-        pub const DIDR0 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const DIDR0 = @as(*volatile Mmio(8, packed struct {
             ADC0D: u1,
             ADC1D: u1,
             ADC2D: u1,
@@ -677,15 +669,14 @@ pub const registers = struct {
             ADC5D: u1,
             padding0: u1,
             padding1: u1,
-        }), 0x7e);
+        }), @ptrFromInt(0x7e));
     };
 
     /// Analog Comparator
     pub const AC = struct {
-
         /// address: 0x50
         /// Analog Comparator Control And Status Register
-        pub const ACSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const ACSR = @as(*volatile Mmio(8, packed struct {
             /// Analog Comparator Interrupt Mode Select bits
             ///
             /// 0x0: Interrupt on Toggle
@@ -705,11 +696,11 @@ pub const registers = struct {
             ACBG: u1,
             /// Analog Comparator Disable
             ACD: u1,
-        }), 0x50);
+        }), @ptrFromInt(0x50));
 
         /// address: 0x7f
         /// Digital Input Disable Register 1
-        pub const DIDR1 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const DIDR1 = @as(*volatile Mmio(8, packed struct {
             /// AIN0 Digital Input Disable
             AIN0D: u1,
             /// AIN1 Digital Input Disable
@@ -720,75 +711,71 @@ pub const registers = struct {
             padding3: u1,
             padding4: u1,
             padding5: u1,
-        }), 0x7f);
+        }), @ptrFromInt(0x7f));
     };
 
     /// I/O Port
     pub const PORTB = struct {
-
         /// address: 0x25
         /// Port B Data Register
-        pub const PORTB = @intToPtr(*volatile u8, 0x25);
+        pub const PORTB = @as(*volatile u8, @ptrFromInt(0x25));
 
         /// address: 0x24
         /// Port B Data Direction Register
-        pub const DDRB = @intToPtr(*volatile u8, 0x24);
+        pub const DDRB = @as(*volatile u8, @ptrFromInt(0x24));
 
         /// address: 0x23
         /// Port B Input Pins
-        pub const PINB = @intToPtr(*volatile u8, 0x23);
+        pub const PINB = @as(*volatile u8, @ptrFromInt(0x23));
     };
 
     /// I/O Port
     pub const PORTC = struct {
-
         /// address: 0x28
         /// Port C Data Register
-        pub const PORTC = @intToPtr(*volatile u7, 0x28);
+        pub const PORTC = @as(*volatile u7, @ptrFromInt(0x28));
 
         /// address: 0x27
         /// Port C Data Direction Register
-        pub const DDRC = @intToPtr(*volatile u7, 0x27);
+        pub const DDRC = @as(*volatile u7, @ptrFromInt(0x27));
 
         /// address: 0x26
         /// Port C Input Pins
-        pub const PINC = @intToPtr(*volatile u7, 0x26);
+        pub const PINC = @as(*volatile u7, @ptrFromInt(0x26));
     };
 
     /// I/O Port
     pub const PORTD = struct {
-
         /// address: 0x2b
         /// Port D Data Register
-        pub const PORTD = @intToPtr(*volatile u8, 0x2b);
+        pub const PORTD = @as(*volatile u8, @ptrFromInt(0x2b));
 
         /// address: 0x2a
         /// Port D Data Direction Register
-        pub const DDRD = @intToPtr(*volatile u8, 0x2a);
+        pub const DDRD = @as(*volatile u8, @ptrFromInt(0x2a));
 
         /// address: 0x29
         /// Port D Input Pins
-        pub const PIND = @intToPtr(*volatile u8, 0x29);
+        pub const PIND = @as(*volatile u8, @ptrFromInt(0x29));
     };
 
     /// Timer/Counter, 8-bit
     pub const TC0 = struct {
-
         /// address: 0x48
         /// Timer/Counter0 Output Compare Register
-        pub const OCR0B = @intToPtr(*volatile u8, 0x48);
+        pub const OCR0B = @as(*volatile u8, @ptrFromInt(0x48));
 
         /// address: 0x47
         /// Timer/Counter0 Output Compare Register
-        pub const OCR0A = @intToPtr(*volatile u8, 0x47);
+        pub const OCR0A = @as(*volatile u8, @ptrFromInt(0x47));
 
         /// address: 0x46
         /// Timer/Counter0
-        pub const TCNT0 = @intToPtr(*volatile u8, 0x46);
+        pub const TCNT0 = @as(*volatile u8, @ptrFromInt(0x46));
 
         /// address: 0x45
         /// Timer/Counter Control Register B
-        pub const TCCR0B = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR0B = @as(*volatile Mmio(8, packed struct {
             /// Clock Select
             ///
             /// 0x0: No Clock Source (Stopped)
@@ -807,11 +794,11 @@ pub const registers = struct {
             FOC0B: u1,
             /// Force Output Compare A
             FOC0A: u1,
-        }), 0x45);
+        }), @ptrFromInt(0x45));
 
         /// address: 0x44
         /// Timer/Counter Control Register A
-        pub const TCCR0A = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TCCR0A = @as(*volatile Mmio(8, packed struct {
             /// Waveform Generation Mode
             WGM0: u2,
             reserved0: u1,
@@ -820,11 +807,11 @@ pub const registers = struct {
             COM0B: u2,
             /// Compare Output Mode, Phase Correct PWM Mode
             COM0A: u2,
-        }), 0x44);
+        }), @ptrFromInt(0x44));
 
         /// address: 0x6e
         /// Timer/Counter0 Interrupt Mask Register
-        pub const TIMSK0 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TIMSK0 = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter0 Overflow Interrupt Enable
             TOIE0: u1,
             /// Timer/Counter0 Output Compare Match A Interrupt Enable
@@ -836,11 +823,11 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x6e);
+        }), @ptrFromInt(0x6e));
 
         /// address: 0x35
         /// Timer/Counter0 Interrupt Flag register
-        pub const TIFR0 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const TIFR0 = @as(*volatile Mmio(8, packed struct {
             /// Timer/Counter0 Overflow Flag
             TOV0: u1,
             /// Timer/Counter0 Output Compare Flag 0A
@@ -852,11 +839,11 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x35);
+        }), @ptrFromInt(0x35));
 
         /// address: 0x43
         /// General Timer/Counter Control Register
-        pub const GTCCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const GTCCR = @as(*volatile Mmio(8, packed struct {
             /// Prescaler Reset Timer/Counter1 and Timer/Counter0
             PSRSYNC: u1,
             reserved0: u1,
@@ -867,15 +854,14 @@ pub const registers = struct {
             reserved5: u1,
             /// Timer/Counter Synchronization Mode
             TSM: u1,
-        }), 0x43);
+        }), @ptrFromInt(0x43));
     };
 
     /// External Interrupts
     pub const EXINT = struct {
-
         /// address: 0x69
         /// External Interrupt Control Register
-        pub const EICRA = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const EICRA = @as(*volatile Mmio(8, packed struct {
             /// External Interrupt Sense Control 0 Bits
             ///
             /// 0x0: Low Level of INTX
@@ -894,11 +880,11 @@ pub const registers = struct {
             padding1: u1,
             padding2: u1,
             padding3: u1,
-        }), 0x69);
+        }), @ptrFromInt(0x69));
 
         /// address: 0x3d
         /// External Interrupt Mask Register
-        pub const EIMSK = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const EIMSK = @as(*volatile Mmio(8, packed struct {
             /// External Interrupt Request 1 Enable
             INT: u2,
             padding0: u1,
@@ -907,11 +893,11 @@ pub const registers = struct {
             padding3: u1,
             padding4: u1,
             padding5: u1,
-        }), 0x3d);
+        }), @ptrFromInt(0x3d));
 
         /// address: 0x3c
         /// External Interrupt Flag Register
-        pub const EIFR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const EIFR = @as(*volatile Mmio(8, packed struct {
             /// External Interrupt Flags
             INTF: u2,
             padding0: u1,
@@ -920,11 +906,11 @@ pub const registers = struct {
             padding3: u1,
             padding4: u1,
             padding5: u1,
-        }), 0x3c);
+        }), @ptrFromInt(0x3c));
 
         /// address: 0x68
         /// Pin Change Interrupt Control Register
-        pub const PCICR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const PCICR = @as(*volatile Mmio(8, packed struct {
             /// Pin Change Interrupt Enables
             PCIE: u3,
             padding0: u1,
@@ -932,33 +918,33 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x68);
+        }), @ptrFromInt(0x68));
 
         /// address: 0x6d
         /// Pin Change Mask Register 2
-        pub const PCMSK2 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const PCMSK2 = @as(*volatile Mmio(8, packed struct {
             /// Pin Change Enable Masks
             PCINT: u8,
-        }), 0x6d);
+        }), @ptrFromInt(0x6d));
 
         /// address: 0x6c
         /// Pin Change Mask Register 1
-        pub const PCMSK1 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const PCMSK1 = @as(*volatile Mmio(8, packed struct {
             /// Pin Change Enable Masks
             PCINT: u7,
             padding0: u1,
-        }), 0x6c);
+        }), @ptrFromInt(0x6c));
 
         /// address: 0x6b
         /// Pin Change Mask Register 0
-        pub const PCMSK0 = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const PCMSK0 = @as(*volatile Mmio(8, packed struct {
             /// Pin Change Enable Masks
             PCINT: u8,
-        }), 0x6b);
+        }), @ptrFromInt(0x6b));
 
         /// address: 0x3b
         /// Pin Change Interrupt Flag Register
-        pub const PCIFR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const PCIFR = @as(*volatile Mmio(8, packed struct {
             /// Pin Change Interrupt Flags
             PCIF: u3,
             padding0: u1,
@@ -966,19 +952,18 @@ pub const registers = struct {
             padding2: u1,
             padding3: u1,
             padding4: u1,
-        }), 0x3b);
+        }), @ptrFromInt(0x3b));
     };
 
     /// Serial Peripheral Interface
     pub const SPI = struct {
-
         /// address: 0x4e
         /// SPI Data Register
-        pub const SPDR = @intToPtr(*volatile u8, 0x4e);
+        pub const SPDR = @as(*volatile u8, @ptrFromInt(0x4e));
 
         /// address: 0x4d
         /// SPI Status Register
-        pub const SPSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const SPSR = @as(*volatile Mmio(8, packed struct {
             /// Double SPI Speed Bit
             SPI2X: u1,
             reserved0: u1,
@@ -990,11 +975,11 @@ pub const registers = struct {
             WCOL: u1,
             /// SPI Interrupt Flag
             SPIF: u1,
-        }), 0x4d);
+        }), @ptrFromInt(0x4d));
 
         /// address: 0x4c
         /// SPI Control Register
-        pub const SPCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const SPCR = @as(*volatile Mmio(8, packed struct {
             /// SPI Clock Rate Selects
             ///
             /// 0x0: fosc/2 or fosc/4
@@ -1014,15 +999,14 @@ pub const registers = struct {
             SPE: u1,
             /// SPI Interrupt Enable
             SPIE: u1,
-        }), 0x4c);
+        }), @ptrFromInt(0x4c));
     };
 
     /// Watchdog Timer
     pub const WDT = struct {
-
         /// address: 0x60
         /// Watchdog Timer Control Register
-        pub const WDTCSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const WDTCSR = @as(*volatile Mmio(8, packed struct {
             reserved0: u1,
             reserved1: u1,
             reserved2: u1,
@@ -1035,15 +1019,14 @@ pub const registers = struct {
             WDIE: u1,
             /// Watchdog Timeout Interrupt Flag
             WDIF: u1,
-        }), 0x60);
+        }), @ptrFromInt(0x60));
     };
 
     /// CPU Registers
     pub const CPU = struct {
-
         /// address: 0x64
         /// Power Reduction Register
-        pub const PRR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const PRR = @as(*volatile Mmio(8, packed struct {
             /// Power Reduction ADC
             PRADC: u1,
             /// Power Reduction USART
@@ -1059,15 +1042,15 @@ pub const registers = struct {
             PRTIM2: u1,
             /// Power Reduction TWI
             PRTWI: u1,
-        }), 0x64);
+        }), @ptrFromInt(0x64));
 
         /// address: 0x66
         /// Oscillator Calibration Value
-        pub const OSCCAL = @intToPtr(*volatile u8, 0x66);
+        pub const OSCCAL = @as(*volatile u8, @ptrFromInt(0x66));
 
         /// address: 0x61
         /// Clock Prescale Register
-        pub const CLKPR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const CLKPR = @as(*volatile Mmio(8, packed struct {
             /// Clock Prescaler Select Bits
             ///
             /// 0x0: 1
@@ -1085,11 +1068,11 @@ pub const registers = struct {
             reserved2: u1,
             /// Clock Prescaler Change Enable
             CLKPCE: u1,
-        }), 0x61);
+        }), @ptrFromInt(0x61));
 
         /// address: 0x5f
         /// Status Register
-        pub const SREG = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const SREG = @as(*volatile Mmio(8, packed struct {
             /// Carry Flag
             C: u1,
             /// Zero Flag
@@ -1106,15 +1089,15 @@ pub const registers = struct {
             T: u1,
             /// Global Interrupt Enable
             I: u1,
-        }), 0x5f);
+        }), @ptrFromInt(0x5f));
 
         /// address: 0x5d
         /// Stack Pointer
-        pub const SP = @intToPtr(*volatile u12, 0x5d);
+        pub const SP = @as(*volatile u12, @ptrFromInt(0x5d));
 
         /// address: 0x57
         /// Store Program Memory Control and Status Register
-        pub const SPMCSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const SPMCSR = @as(*volatile Mmio(8, packed struct {
             /// Store Program Memory
             SPMEN: u1,
             /// Page Erase
@@ -1131,11 +1114,11 @@ pub const registers = struct {
             RWWSB: u1,
             /// SPM Interrupt Enable
             SPMIE: u1,
-        }), 0x57);
+        }), @ptrFromInt(0x57));
 
         /// address: 0x55
         /// MCU Control Register
-        pub const MCUCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const MCUCR = @as(*volatile Mmio(8, packed struct {
             IVCE: u1,
             IVSEL: u1,
             reserved0: u1,
@@ -1146,11 +1129,11 @@ pub const registers = struct {
             /// BOD Sleep
             BODS: u1,
             padding0: u1,
-        }), 0x55);
+        }), @ptrFromInt(0x55));
 
         /// address: 0x54
         /// MCU Status Register
-        pub const MCUSR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const MCUSR = @as(*volatile Mmio(8, packed struct {
             /// Power-on reset flag
             PORF: u1,
             /// External Reset Flag
@@ -1163,11 +1146,11 @@ pub const registers = struct {
             padding1: u1,
             padding2: u1,
             padding3: u1,
-        }), 0x54);
+        }), @ptrFromInt(0x54));
 
         /// address: 0x53
         /// Sleep Mode Control Register
-        pub const SMCR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const SMCR = @as(*volatile Mmio(8, packed struct {
             /// Sleep Enable
             SE: u1,
             /// Sleep Mode Select Bits
@@ -1185,35 +1168,34 @@ pub const registers = struct {
             padding1: u1,
             padding2: u1,
             padding3: u1,
-        }), 0x53);
+        }), @ptrFromInt(0x53));
 
         /// address: 0x4b
         /// General Purpose I/O Register 2
-        pub const GPIOR2 = @intToPtr(*volatile u8, 0x4b);
+        pub const GPIOR2 = @as(*volatile u8, @ptrFromInt(0x4b));
 
         /// address: 0x4a
         /// General Purpose I/O Register 1
-        pub const GPIOR1 = @intToPtr(*volatile u8, 0x4a);
+        pub const GPIOR1 = @as(*volatile u8, @ptrFromInt(0x4a));
 
         /// address: 0x3e
         /// General Purpose I/O Register 0
-        pub const GPIOR0 = @intToPtr(*volatile u8, 0x3e);
+        pub const GPIOR0 = @as(*volatile u8, @ptrFromInt(0x3e));
     };
 
     /// EEPROM
     pub const EEPROM = struct {
-
         /// address: 0x41
         /// EEPROM Address Register Bytes
-        pub const EEAR = @intToPtr(*volatile u10, 0x41);
+        pub const EEAR = @as(*volatile u10, @ptrFromInt(0x41));
 
         /// address: 0x40
         /// EEPROM Data Register
-        pub const EEDR = @intToPtr(*volatile u8, 0x40);
+        pub const EEDR = @as(*volatile u8, @ptrFromInt(0x40));
 
         /// address: 0x3f
         /// EEPROM Control Register
-        pub const EECR = @intToPtr(*volatile Mmio(8, packed struct {
+        pub const EECR = @as(*volatile Mmio(8, packed struct {
             /// EEPROM Read Enable
             EERE: u1,
             /// EEPROM Write Enable
@@ -1230,14 +1212,14 @@ pub const registers = struct {
             EEPM: u2,
             padding0: u1,
             padding1: u1,
-        }), 0x3f);
+        }), @ptrFromInt(0x3f));
     };
 };
 
 const std = @import("std");
 
 pub fn mmio(addr: usize, comptime size: u8, comptime PackedT: type) *volatile Mmio(size, PackedT) {
-    return @intToPtr(*volatile Mmio(size, PackedT), addr);
+    return @as(*volatile Mmio(size, PackedT), @ptrFromInt(addr));
 }
 
 pub fn Mmio(comptime size: u8, comptime PackedT: type) type {
@@ -1260,13 +1242,13 @@ pub fn Mmio(comptime size: u8, comptime PackedT: type) type {
         pub const underlying_type = PackedT;
 
         pub inline fn read(addr: *volatile Self) PackedT {
-            return @bitCast(PackedT, addr.raw);
+            return @as(PackedT, @bitCast(addr.raw));
         }
 
         pub inline fn write(addr: *volatile Self, val: PackedT) void {
             // This is a workaround for a compiler bug related to miscompilation
             // If the tmp var is not used, result location will fuck things up
-            var tmp = @bitCast(IntT, val);
+            const tmp = @as(IntT, @bitCast(val));
             addr.raw = tmp;
         }
 
@@ -1295,21 +1277,21 @@ pub fn MmioInt(comptime size: u8, comptime T: type) type {
         raw: std.meta.Int(.unsigned, size),
 
         pub inline fn read(addr: *volatile Self) T {
-            return @truncate(T, addr.raw);
+            return @as(T, @truncate(addr.raw));
         }
 
         pub inline fn modify(addr: *volatile Self, val: T) void {
             const Int = std.meta.Int(.unsigned, size);
             const mask = ~@as(Int, (1 << @bitSizeOf(T)) - 1);
 
-            var tmp = addr.raw;
+            const tmp = addr.raw;
             addr.raw = (tmp & mask) | val;
         }
     };
 }
 
 pub fn mmioInt(addr: usize, comptime size: usize, comptime T: type) *volatile MmioInt(size, T) {
-    return @intToPtr(*volatile MmioInt(size, T), addr);
+    return @as(*volatile MmioInt(size, T), @ptrFromInt(addr));
 }
 
 const InterruptVector = extern union {
