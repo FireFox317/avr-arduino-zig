@@ -37,7 +37,7 @@ pub fn build(b: *std.Build) !void {
     };
 
     const upload = b.step("upload", "Upload the code to an Arduino device using avrdude");
-    const cmd = &[_][]const u8{
+    const avrdude = b.addSystemCommand(&.{
         "avrdude",
         "-carduino",
         "-patmega328p",
@@ -45,8 +45,7 @@ pub fn build(b: *std.Build) !void {
         "-P",
         tty,
         flash_command,
-    };
-    const avrdude = b.addSystemCommand(cmd);
+    });
     upload.dependOn(&avrdude.step);
     avrdude.step.dependOn(&exe.step);
 
