@@ -1,7 +1,7 @@
 const std = @import("std");
-const Builder = std.build.Builder;
+const Builder = std.Build;
 
-pub fn build(b: *Builder) !void {
+pub fn build(b: *std.Build) !void {
     const uno = std.zig.CrossTarget{
         .cpu_arch = .avr,
         .cpu_model = .{ .explicit = &std.Target.avr.cpu.atmega328p },
@@ -9,11 +9,16 @@ pub fn build(b: *Builder) !void {
         .abi = .none,
     };
 
-    const exe = b.addExecutable("avr-arduino-zig", "src/start.zig");
-    exe.setTarget(uno);
-    exe.setBuildMode(.ReleaseSafe);
-    exe.setLinkerScriptPath(std.build.FileSource{ .path = "src/linker.ld" });
-    exe.install();
+    const exe = b.addExecutable(.{
+        .name = "avr-arduino-zig",
+        .root_source_file = .{ .path = "src/start.zig" },
+        .target = b.resolveTargetQuery(uno),
+        .optimize = .ReleaseSafe,
+    });
+
+    exe.setLinkerScriptPath(.{ .path = "src/linker.ld" });
+
+    b.installArtifact(exe);
 
     const tty = b.option(
         []const u8,
@@ -21,14 +26,14 @@ pub fn build(b: *Builder) !void {
         "Specify the port to which the Arduino is connected (defaults to /dev/ttyACM0)",
     ) orelse "/dev/ttyACM0";
 
-    const bin_path = b.getInstallPath(exe.install_step.?.dest_dir, exe.out_filename);
+    const bin_path = b.getInstallPath(.{ .custom = exe.installed_path orelse "./bin" }, exe.out_filename);
 
     const flash_command = blk: {
         var tmp = std.ArrayList(u8).init(b.allocator);
         try tmp.appendSlice("-Uflash:w:");
         try tmp.appendSlice(bin_path);
         try tmp.appendSlice(":e");
-        break :blk tmp.toOwnedSlice();
+        break :blk try tmp.toOwnedSlice();
     };
 
     const upload = b.step("upload", "Upload the code to an Arduino device using avrdude");
@@ -42,7 +47,7 @@ pub fn build(b: *Builder) !void {
         flash_command,
     });
     upload.dependOn(&avrdude.step);
-    avrdude.step.dependOn(&exe.install_step.?.step);
+    avrdude.step.dependOn(&exe.step);
 
     const objdump = b.step("objdump", "Show dissassembly of the code using avr-objdump");
     const avr_objdump = b.addSystemCommand(&.{
@@ -51,7 +56,7 @@ pub fn build(b: *Builder) !void {
         bin_path,
     });
     objdump.dependOn(&avr_objdump.step);
-    avr_objdump.step.dependOn(&exe.install_step.?.step);
+    avr_objdump.step.dependOn(&exe.step);
 
     const monitor = b.step("monitor", "Opens a monitor to the serial output");
     const screen = b.addSystemCommand(&.{
