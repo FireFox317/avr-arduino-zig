@@ -30,7 +30,8 @@ pub fn main() void {
     // var x: u8 = 255;
     // x += 1;
 
-    gpio.init(5, .out);
+    gpio.init(.D13, .out);
+    gpio.init(.D5, .out);
 
     while (true) {
         uart.write_ch(ch);
@@ -41,7 +42,8 @@ pub fn main() void {
             uart.write("\r\n");
         }
 
-        gpio.toggle(5);
+        gpio.toggle(.D13);
+        gpio.toggle(.D5);
         delay_cycles(50000);
     }
 }
