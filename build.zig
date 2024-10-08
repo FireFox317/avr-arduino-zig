@@ -11,12 +11,12 @@ pub fn build(b: *std.Build) !void {
 
     const exe = b.addExecutable(.{
         .name = "avr-arduino-zig",
-        .root_source_file = .{ .path = "src/start.zig" },
+        .root_source_file = b.path("src/start.zig"),
         .target = b.resolveTargetQuery(uno),
         .optimize = .ReleaseSafe,
     });
 
-    exe.setLinkerScriptPath(.{ .path = "src/linker.ld" });
+    exe.setLinkerScriptPath(b.path("src/linker.ld"));
 
     b.installArtifact(exe);
 
